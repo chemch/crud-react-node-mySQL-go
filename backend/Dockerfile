@@ -11,3 +11,4 @@ COPY . .
 EXPOSE 8800
 
 CMD ["npm", "start"]
+
