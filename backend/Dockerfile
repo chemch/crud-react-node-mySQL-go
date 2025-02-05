@@ -1,23 +1,18 @@
+# Use Node.js base image
+FROM node:18-alpine
 
-FROM node:18
-
-
+# Set working directory
 WORKDIR /app
 
-
+# Copy package.json and install dependencies
 COPY package*.json ./
-
-
 RUN npm install
 
-
+# Copy source code
 COPY . .
 
+# Expose port
+EXPOSE 8800
 
-RUN chmod +x /app/node_modules/.bin/nodemon
-
-
-EXPOSE 5001
-
-
-CMD ["index.js"]
+# Start the backend server
+CMD ["npm", "start"]

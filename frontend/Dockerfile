@@ -1,26 +1,17 @@
+# Use Node.js base image
+FROM node:18-alpine
 
-FROM node:18
-
-
+# Set working directory
 WORKDIR /app
 
-
+# Copy package.json and install dependencies
 COPY package*.json ./
-
-
 RUN npm install
 
-
+# Copy source code
 COPY . .
 
+# Expose port
+EXPOSE 5173
 
-RUN npm run build
-
-
-RUN npm install -g serve
-
-
-EXPOSE 3000
-
-
-CMD ["serve", "-s", "build", "-l", "3000"]
+CMD ["npm", "run", "dev", "--", "--host"]
