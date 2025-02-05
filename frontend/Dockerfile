@@ -1,17 +1,10 @@
-# Use Node.js base image
-FROM node:18-alpine
+FROM node:18
 
-# Set working directory
-WORKDIR /app
-
-# Copy package.json and install dependencies
-COPY package*.json ./
+WORKDIR /usr/src/app
+COPY package*.json .
 RUN npm install
-
-# Copy source code
 COPY . .
-
-# Expose port
 EXPOSE 5173
 
+# was failing because of the --host flag
 CMD ["npm", "run", "dev", "--", "--host"]
