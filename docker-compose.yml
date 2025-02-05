@@ -1,55 +1,50 @@
-name: chase-app-containerized
 
 services:
 
-# database service
-  mySqlDb:
-    image: mysql:latest
+
+  mysql_db:
+    image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: test
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
-    healthcheck:
-      test: ["CMD-SHELL", "mysql -uroot -ppassword -e 'USE test;SELECT 1;'"]
-      start_period: 2s
-      interval: 3s
-      timeout: 3s
-      retries: 60
     volumes:
-      - db_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - applicationNetwork
 
-# frontend service
-  frontend:
+
+
+
+  backend_app:
+    build:
+      context: ./backend
+    ports:
+      - "8800:8800"
+    environment:
+      DB_HOST: mysql_db
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: test
+    depends_on:
+      - mysql_db
+
+
+
+
+  frontend_ui:
+    environment:
+      - PORT=5173
     build:
       context: ./frontend
-      dockerfile: Dockerfile
     ports:
       - "5173:5173"
     depends_on:
-      - backend
-    networks:
-      - applicationNetwork
+      - backend_app
 
-# backend service
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "8800:8800"
-    depends_on:
-      mySqlDb:
-        condition: service_healthy
-    networks:
-      - applicationNetwork
-  
+
+
 volumes:
-  db_data:
-  
-networks:
-  applicationNetwork:
+  db-data:
     driver: bridge

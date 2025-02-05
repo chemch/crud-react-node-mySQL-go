@@ -2,7 +2,6 @@ CREATE DATABASE IF NOT EXISTS test;
 
 USE test;
 
-# Create table users
 
 CREATE TABLE IF NOT EXISTS books (
     id INT AUTO_INCREMENT PRIMARY KEY,
