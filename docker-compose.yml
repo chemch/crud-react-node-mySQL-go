@@ -25,13 +25,11 @@ services:
 
   db:
     image: mysql:latest
-    container_name: mysql_db
+    container_name: mysqlDb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: P@55w0rd!
+      MYSQL_ROOT_PASSWORD: 
       MYSQL_DATABASE: test
-      MYSQL_USER: chemch
-      MYSQL_PASSWORD: P@55w0rd!
     ports:
       - "3306:3306"
     volumes:
