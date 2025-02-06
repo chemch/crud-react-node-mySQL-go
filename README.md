@@ -1,3 +1,12 @@
+There was an issue with this repo which was causing the failures. I had a duplicate Dockerfile somehow that wasn't showing locally. After deleting that and making the following fixes it worked:
+- Creating table with rows
+- Healthcheck on DB
+- Vite configuration to get it to point to the right port locally
+- Changing index to use the correct login information
+
+  I originally got this all working in a separate branch: https://github.com/test-chemch/crud-react-node-mySQL-chase but I copied it into this one so they're now the same. 
+
+
 # Lama Book Shop CRUD Web Application
 
 <h4><i>Enjoy your favorite books, movies, and animated characters!</i></h4>
