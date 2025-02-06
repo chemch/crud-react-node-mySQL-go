@@ -1,4 +1,5 @@
-FROM node:18
+# same from slides in class
+FROM node:16
 WORKDIR /app
 COPY package*.json ./
 RUN npm install

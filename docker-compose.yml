@@ -2,8 +2,8 @@
 services:
 
 
-  mysql_db:
-    image: mysql:8.0
+  db:
+    image: mysql/mysql-server:5.7 
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: test
@@ -12,28 +12,35 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db_creation/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD", "mysql", "-u", "root", "-p", "password" ]
+      interval: 10s
+      timeout: 8s
+      retries: 5
 
 
 
 
-  backend_app:
+
+  backend:
     build:
       context: ./backend
     ports:
       - "8800:8800"
     environment:
-      DB_HOST: mysql_db
+      DB_HOST: db
       DB_USER: user
       DB_PASSWORD: password
       DB_NAME: test
     depends_on:
-      - mysql_db
+      - db
 
 
 
 
-  frontend_ui:
+
+  frontend:
     environment:
       - PORT=5173
     build:
@@ -41,10 +48,11 @@ services:
     ports:
       - "5173:5173"
     depends_on:
-      - backend_app
+      - backend
+
 
 
 
 volumes:
   db-data:
-    driver: bridge
+

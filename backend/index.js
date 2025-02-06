@@ -4,11 +4,12 @@ import cors from "cors"
 
 const app = express();
 
+// needed to update this code to use the environment variables
 const db = mysql.createConnection({
-  host: "mysql_db",
-  user: "user",
-  password: "password",
-  database: "test"
+    host: process.env.MYSQL_HOST || "db",
+    user: process.env.MYSQL_USER || "user",
+    password: process.env.MYSQL_PASSWORD || "password",
+    database: process.env.MYSQL_DB || "test"
 })
 
 app.use(express.json())//return json data using the api server postman
@@ -19,7 +20,6 @@ app.get("/", (req,res)=>{
     res.json("Hello World from the backend!!!")
 })
 
-//postman -> get method  http://localhost:8800/books
 app.get("/books", (req,res)=>{
     const query = "SELECT * FROM books"
     db.query(query, (err,data)=>{
@@ -27,16 +27,6 @@ app.get("/books", (req,res)=>{
           return res.json(data)
     })
   })
-
-
-  //postman ---> post method
-  //json body bellow
-  //----------------------------- http://localhost:8800/books
-  //{
-// "title": "title from client",
-// "description": "description from client",
-// "cover": "cover from client"
-// }
 
   app.post("/books", (req,res)=>{
     const query = "INSERT INTO books (`title`, `description`, `price`, `cover`) VALUES (?)"
@@ -84,5 +74,3 @@ app.get("/books", (req,res)=>{
 app.listen(8800, ()=>{
     console.log("Connect to the backend!!!!")
 })
-
-//npm start
